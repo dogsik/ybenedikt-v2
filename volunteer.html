@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Volunteer With Us * Yuliya Benedziktavich</title>
+<meta name="description" content="Join Yuliya's Team. Together we are stronger to shape our community!">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/fontawesome/css/all.min.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="index.html">
+      <img src="https://ybenedikt.ca/wp-content/uploads/2026/08/logo-Yuliya-60x60.png" alt="Yuliya Benedziktavich">
+      Yuliya Benedziktavich
+    </a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="about.html">About me</a>
+      <a href="vote.html">How To Vote</a>
+      <a href="contact.html">Contact</a>
+      <a href="volunteer.html" class="active">Volunteer</a>
+      <a href="contact.html" class="btn btn--yellow">Contribute</a>
+    </nav>
+    <button class="nav-toggle" aria-label="Toggle menu"><i class="fas fa-bars"></i></button>
+  </div>
+</header>
+
+<section class="hero hero--photo" style="background-image:url('https://ybenedikt.ca/wp-content/uploads/2022/08/RichmondHillCentreForThePerformingArts-scaled.jpg');padding-block:var(--space-6)">
+  <div class="container">
+    <i class="fas fa-hands-helping" style="font-size:32px;color:var(--color-yellow);margin-bottom:var(--space-2)"></i>
+    <h1 style="font-size:clamp(28px,4vw,42px)">Join Yuliya&rsquo;s Team</h1>
+    <p style="font-size:18px">Together we are stronger to shape our community!</p>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="card reveal" style="max-width:760px;margin-inline:auto">
+      <form class="form-grid" onsubmit="return false">
+        <div class="form-section-label">Your information</div>
+        <div class="form-group"><label for="v-name">Name</label><input id="v-name" type="text" placeholder="Your Name" required></div>
+        <div class="form-group"><label for="v-phone">Phone Number</label><input id="v-phone" type="tel" placeholder="Your Phone" required></div>
+        <div class="form-group"><label for="v-email">Email</label><input id="v-email" type="email" placeholder="Email Address" required></div>
+        <div class="form-group"><label for="v-postal">Postal Code</label><input id="v-postal" type="text" placeholder="Your Postal Code" required></div>
+
+        <div class="form-section-label">How you&rsquo;d like to help</div>
+        <p class="form-note" style="margin-bottom:-8px">Field &amp; Neighborhood</p>
+        <div class="checkbox-group">
+          <label><input type="checkbox"> Lawn Sign Request</label>
+          <label><input type="checkbox"> Lawn Sign Installation</label>
+          <label><input type="checkbox"> Door-to-Door Canvassing</label>
+          <label><input type="checkbox"> Flyer Distribution</label>
+        </div>
+        <p class="form-note" style="margin-bottom:-8px">Events &amp; Election Day</p>
+        <div class="checkbox-group">
+          <label><input type="checkbox"> Rides to the Polls</label>
+          <label><input type="checkbox"> Election Day Scrutineer / Volunteer</label>
+          <label><input type="checkbox"> Translation Services</label>
+        </div>
+
+        <div class="form-section-label">Availability &amp; notes</div>
+        <div class="form-group">
+          <label for="v-avail">Availability</label>
+          <select id="v-avail">
+            <option>- Select -</option>
+            <option>Weekdays</option>
+            <option>Weekends</option>
+            <option>Evenings only</option>
+          </select>
+        </div>
+        <div class="form-group" style="grid-column:1/-1">
+          <label for="v-notes">Additional Comments / Skills</label>
+          <textarea id="v-notes" rows="3" placeholder="Tell us about any specific skills, languages you speak, or times you are available, etc."></textarea>
+        </div>
+        <p class="form-note">Please confirm you&rsquo;re a human. (reCAPTCHA)</p>
+        <button class="btn btn--yellow form-submit" type="submit">Sign Up to Volunteer</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div>&copy; 2026 Yuliya Benedziktavich</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="vote.html">How To Vote</a>
+      <a href="contact.html">Contact</a>
+      <a href="archive.html">Archive</a>
+      <a href="volunteer.html">Volunteer</a>
+    </nav>
+    <div class="socials">
+      <a href="https://www.facebook.com/YuliyaBenedikt/" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+      <a href="http://www.instagram.com/benedikt.yu" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+      <a href="http://www.tiktok.com/@benedikt.yu" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/site.js" defer></script>
+</body>
+</html>

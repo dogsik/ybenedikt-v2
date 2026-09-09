@@ -1,0 +1,14 @@
+# Secrets - never commit
+start
+
+# Old pre-redesign backups (kept locally for reference, not part of the hosted site)
+*-old.html
+
+# Working artifacts from the redesign process, not part of the site
+docs/superpowers/
+.superpowers/
+PDF-preview/
+preview-all-in-one.html
+
+# Local archives / exports
+*.zip

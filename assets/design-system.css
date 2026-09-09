@@ -1,0 +1,576 @@
+/*
+  Additive overlay for ybenedikt.ca — does NOT restyle the existing
+  Astra / Elementor design. It only adds things that don't exist yet:
+  field grouping inside forms, and validation error/success states.
+
+  (An earlier version of this file also tried to unify containers,
+  typography and colors site-wide. That fought the page's own custom
+  per-element styling and broke the hero image + several headings, so
+  it was reverted. Tokens are kept below for future, more surgical use.)
+*/
+
+:root{
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-5: 48px;
+  --space-6: 64px;
+  --space-7: 96px;
+
+  --color-text: #0F172A;
+  --color-text-secondary: #3A4453;
+  --color-text-muted: #5F6B7A;
+  --color-border: #E4E1D6;
+  --color-error: #B3261E;
+  --color-error-bg: #FBEAE9;
+  --color-success: #3A4453;
+  --color-focus: #0F172A;
+  --radius: 8px;
+
+  /* Brand palette: yellow / gray / white only - no green, no orange.
+     --color-accent mirrors the site's Astra/Elementor "Global Color 1/2"
+     (--ast-global-color-0/1), which is used ~90 times site-wide as text,
+     border, fill AND button background-with-white-text-on-top. One value
+     has to work in all four roles, so it's a dark gold rather than a
+     bright yellow: #8F6A00 clears 4.5:1 both as text-on-white and as a
+     background with white text on it (contrast is symmetric either way).
+     --color-yellow is the bright, "actually looks yellow" variant, used
+     only on the handful of large CTA fills where it's paired explicitly
+     with dark text below - see the button and card rules further down. */
+  --color-accent: #8F6A00;
+  --color-accent-deep: #6B5200;
+  --color-yellow: #F5B700;
+}
+
+/* Two consecutive heading widgets (e.g. "Serving Richmond Hill with
+   Integrity" directly above "Brief Introduction") are closely related -
+   tighten the gap between them to the 8px tier. (This is outside the
+   "MY VISION" section below, which has its own self-contained rules.) */
+.elementor-widget-heading:has(+ .elementor-widget-heading){
+  margin-block-end: var(--space-1) !important;
+}
+
+/* ==========================================================================
+   "MY VISION FOR RICHMOND HILL" section (element 46c9566b)
+   Single source of truth for its composition, spacing and alignment.
+   Six image+text rows, alternating image-left/image-right by design.
+   ========================================================================== */
+:root{
+  --vision-row-gap: 80px;      /* between each image+text row */
+  --vision-heading-gap: 4px;   /* heading -> divider -> first line of copy */
+  --vision-image-ratio: 3 / 2; /* shared aspect ratio for every row image */
+}
+
+/* Row = one image container + one text container, laid out as an even
+   two-column grid. align-items:center is what vertically centers the
+   text block against its image - not a per-row margin/transform. */
+.elementor-element-46c9566b > .e-con-inner{
+  row-gap: var(--vision-row-gap);
+  align-items: center !important; /* Elementor sets this from a per-element
+    --align-items custom property via a higher-specificity rule
+    (.e-con.e-flex>.e-con-inner), which otherwise wins and stretches
+    both columns to equal height instead of centering the shorter one. */
+}
+.elementor-element-46c9566b > .e-con-inner > [data-e-type="container"]{
+  --width: 50%; /* was 33/66, which over-widened the text column and
+                   made row heights inconsistent row to row */
+}
+
+/* Images: same width (handled by the 50% column above) and a declared
+   aspect-ratio (so the browser reserves the right space up front - no
+   layout shift while it loads, still a best practice), but the ratio
+   itself matches each photo's own native proportions instead of forcing
+   one size on all of them. 4 of the 6 source photos are already 3:2;
+   the other 2 (neighbourhood aerial, cash) are 16:9 and get their own
+   override below so nothing gets cropped away from the original photo. */
+.elementor-element-46c9566b .elementor-widget-image img{
+  width: 100%;
+  aspect-ratio: var(--vision-image-ratio);
+  object-fit: cover;
+}
+.elementor-element-4a5dc87b .elementor-widget-image img,
+.elementor-element-e185ac8 .elementor-widget-image img{
+  aspect-ratio: 16 / 9;
+}
+
+/* Text block internals: heading close to its divider, divider close to
+   the copy that follows - one small, consistent gap, not the theme's
+   default 20px widget spacing (which reads as disconnected from the
+   image next to it). Paragraph-to-paragraph spacing inside the copy is
+   untouched - the theme's own 20px between <p> tags already reads fine
+   as "the next thought," a bigger gap than heading-to-copy needs. */
+.elementor-element-46c9566b .elementor-widget-heading:has(+ .elementor-widget-divider){
+  margin-block-end: var(--vision-heading-gap);
+}
+.elementor-element-46c9566b .elementor-widget-divider{
+  margin-block-end: var(--vision-heading-gap);
+}
+.elementor-element-46c9566b .elementor-widget-divider .elementor-divider{
+  padding-block: 2px;
+}
+/* The column itself also carries a "gap" between its stacked widgets
+   (separate from any widget's own margin, and additive with it) -
+   shrink that too so the two don't stack into one large gap. */
+.elementor-element-46c9566b .e-con:has(> .elementor-widget-divider){
+  --row-gap: var(--vision-heading-gap);
+  --column-gap: var(--vision-heading-gap);
+  gap: var(--vision-heading-gap);
+}
+
+/* Mobile: one column, image always first in every row regardless of
+   which side it sits on at desktop (the source order alternates
+   image-then-text / text-then-image to build the left/right rows above,
+   so on mobile every other row needs its two children swapped back to
+   image-first). Content is a fixed set of 6 rows (12 containers), so
+   this lists all 12 explicitly rather than guessing at a formula. */
+@media (max-width: 767px){
+  .elementor-element-46c9566b > .e-con-inner{
+    row-gap: var(--space-6);
+  }
+  .elementor-element-46c9566b > .e-con-inner > [data-e-type="container"]{
+    --width: 100%;
+  }
+  /* same native-ratio logic as desktop - the two 16:9 photos already
+     have their override above, which still applies at this width. */
+  .elementor-element-46c9566b > .e-con-inner > [data-e-type="container"]:nth-child(1){ order: 1; }
+  .elementor-element-46c9566b > .e-con-inner > [data-e-type="container"]:nth-child(2){ order: 2; }
+  .elementor-element-46c9566b > .e-con-inner > [data-e-type="container"]:nth-child(3){ order: 4; }
+  .elementor-element-46c9566b > .e-con-inner > [data-e-type="container"]:nth-child(4){ order: 3; }
+  .elementor-element-46c9566b > .e-con-inner > [data-e-type="container"]:nth-child(5){ order: 5; }
+  .elementor-element-46c9566b > .e-con-inner > [data-e-type="container"]:nth-child(6){ order: 6; }
+  .elementor-element-46c9566b > .e-con-inner > [data-e-type="container"]:nth-child(7){ order: 8; }
+  .elementor-element-46c9566b > .e-con-inner > [data-e-type="container"]:nth-child(8){ order: 7; }
+  .elementor-element-46c9566b > .e-con-inner > [data-e-type="container"]:nth-child(9){ order: 9; }
+  .elementor-element-46c9566b > .e-con-inner > [data-e-type="container"]:nth-child(10){ order: 10; }
+  .elementor-element-46c9566b > .e-con-inner > [data-e-type="container"]:nth-child(11){ order: 12; }
+  .elementor-element-46c9566b > .e-con-inner > [data-e-type="container"]:nth-child(12){ order: 11; }
+}
+
+/* ==========================================================================
+   Real, confirmed mobile bug on the live site (checked against production,
+   not something introduced here): the Contact and Volunteer forms sit
+   inside a section+column+widget chain that each carry their own
+   desktop-oriented padding (30px + 20px + 40px per side on Volunteer)
+   with no mobile reduction anywhere. Stacked, that eats up to 180px of a
+   320px-wide phone screen, squeezing the form to ~140px and pushing the
+   page into horizontal overflow (confirmed: 74px overflow at 320px,
+   19px at 375px, matching ybenedikt.ca/volunteer-with-yuliya/ live).
+   Cap padding on just the wrappers that hold a form - other widgets
+   (headings, text, images) are untouched. The :not(#_boost) part is a
+   standard specificity boost (an ID selector that never matches) so this
+   wins over those per-element desktop padding rules without having to
+   match or exceed each one's specificity individually. */
+@media (max-width: 767px){
+  .elementor-widget-container:has(.fluentform):not(#_boost),
+  .elementor-widget-wrap:has(.fluentform):not(#_boost){
+    padding-inline: 0 !important;
+  }
+}
+
+/* Google's reCAPTCHA iframe has a fixed intrinsic width (~304px) that
+   ignores its container entirely - the last remaining source of
+   horizontal overflow at 320px (confirmed on the live site too: same
+   14px overflow on /contact/). Scale the whole widget down slightly so
+   it fits; scrollable-overflow is computed post-transform, so this
+   actually removes the overflow rather than just hiding it. */
+@media (max-width: 340px){
+  .g-recaptcha{
+    transform: scale(0.9);
+    transform-origin: 0 0;
+  }
+}
+
+/* ==========================================================================
+   Bottom CTA sections: "Get Election Day Reminders" (light-gray card),
+   "SHARE YOUR QUESTIONS OR CONCERNS" (gray card), "Be FIRST to know" bar
+   and "Stay Connected with Yuliya's Team" (dark-gray two-column card,
+   formerly sage-green - see the yellow/gray/white palette above).
+   ========================================================================== */
+
+/* Fluent Forms injects each Sign Up button with its own inline <style>
+   using a 5px radius, one px off the 7px on the input fields right next
+   to it. Same form markup/colors elsewhere, just the one mismatched value. */
+.fluentform .ff-btn.ff-btn-submit{
+  border-radius: 7px !important;
+}
+
+/* "Let's Talk Now" used Elementor's "link" button style (underlined text,
+   no fill) next to Fluent's solid-yellow Sign Up buttons elsewhere on the
+   page - two different-looking CTAs for the same kind of action. Give it
+   the same solid treatment so every primary CTA reads as one system. */
+.elementor-element-07fed19 .elementor-button{
+  background-color: var(--color-yellow) !important;
+  border-color: var(--color-yellow) !important;
+  color: var(--color-text) !important;
+  border-style: solid !important;
+  border-width: 0 !important;
+  border-radius: 7px !important;
+  padding: 12px 32px !important;
+  font-size: 16px !important;
+  text-decoration: none !important;
+}
+.elementor-element-07fed19 .elementor-button:hover,
+.elementor-element-07fed19 .elementor-button:focus-visible{
+  background-color: #fff !important;
+  border-color: var(--color-accent) !important;
+  color: var(--color-accent) !important;
+}
+
+/* "SHARE YOUR QUESTIONS OR CONCERNS": the white message card is a
+   <blockquote>, which carries the theme's default quote styling meant
+   for body copy - a 1.5em top/bottom + 3em left margin. That alone
+   inflated one line of italic text into a ~140px block that read as
+   "an isolated rectangle floating in gray space." Replace the margin
+   with the card's own padding instead. */
+.elementor-element-2e4af3b blockquote{
+  margin: 0;
+  padding: var(--space-4) var(--space-5);
+}
+.elementor-element-4ea6ea5{
+  padding-block: var(--space-4) !important;
+}
+
+/* "Stay Connected with Yuliya's Team": this widget is embedded on both
+   index.html (row 08e137d) and about.html (row 667d1565) - Elementor
+   generates a different set of element IDs per page for what's
+   otherwise the same block, so every rule below is written for both.
+   The row sized itself with a flat 80px left/right padding instead of
+   the page's normal max-width container, landing ~140px wider than
+   every other section (1280px vs the page's 1140px) and starting at a
+   different left edge. Align it to the same container everyone else
+   uses, then give each colored half its own internal padding so text
+   still sits comfortably clear of the card's rounded corners. */
+.elementor-element-08e137d,
+.elementor-element-667d1565{
+  max-width: 1140px !important; /* Elementor's own .e-con rule sets
+    max-width:min(100%,var(--width)) at the same specificity (one class),
+    and --width defaults to 100% here, so it wins on source order alone
+    without !important. */
+  margin-inline: auto !important;
+  padding-inline: 0 !important;
+}
+.elementor-element-4e65140,
+.elementor-element-d0d0bff,
+.elementor-element-4b6eeeed,
+.elementor-element-444488a7{
+  padding-block: var(--space-5) !important;
+}
+.elementor-element-4e65140,
+.elementor-element-4b6eeeed{
+  padding-inline: var(--space-6) var(--space-4) !important;
+}
+.elementor-element-d0d0bff,
+.elementor-element-444488a7{
+  padding-inline: var(--space-4) var(--space-6) !important;
+}
+/* Vertically centre the heading+description against the taller form next
+   to it. Unlike "MY VISION" above, the two columns here are also each
+   other's card background (rounded on the outer corners to form one
+   pill shape) - stretching them to equal height is what keeps that
+   shape seamless, so the row itself must stay stretched. Centering
+   happens one level in: the left column's own content is centered
+   *within* its own now-equal-height box. Text stays left-aligned; only
+   the block's vertical position shifts. */
+.elementor-element-4e65140,
+.elementor-element-4b6eeeed{
+  justify-content: center !important;
+}
+
+/* The required-field asterisk uses the theme's default red, which has
+   ~1:1 contrast against this card's dark-gray background (formerly a
+   sage-green card, same contrast problem either way). (The heading
+   itself is already white in the page's own CSS - it only looked
+   orange while a global icon-box-title rule elsewhere on this page was
+   overriding it; that rule is now scoped away from this card, see the
+   Contact-page EMAIL/PHONE/LOCATION fix.) */
+.elementor-element-d0d0bff .ff-el-is-required.asterisk-right label::after,
+.elementor-element-444488a7 .ff-el-is-required.asterisk-right label::after{
+  color: var(--color-yellow) !important;
+}
+
+/* Real bug, confirmed on the live site too (not something introduced
+   here): the Sign Up form widget carries its own fixed 0/100/0/50px
+   desktop padding with no mobile override at all. Combined with this
+   column's own padding, the form collapsed to 0px wide on a 320-430px
+   phone (confirmed on production). Drop the widget's own padding on
+   mobile and let the column's (now smaller) padding do the work. */
+@media (max-width: 767px){
+  .elementor-element-4e65140,
+  .elementor-element-d0d0bff,
+  .elementor-element-4b6eeeed,
+  .elementor-element-444488a7{
+    padding-inline: var(--space-4) !important;
+  }
+  .elementor-element-71c9acf > .elementor-widget-container,
+  .elementor-element-bb865cf > .elementor-widget-container{
+    padding: 0 !important;
+  }
+}
+
+/* LOCAL-TESTING FIX ONLY - drop this block before pasting the file into
+   the live site. The Font Awesome icon fonts (solid "fas" and brands
+   "fab") can't load on localhost (cross-origin font fetch from
+   ybenedikt.ca gets blocked by the browser), so every icon on the site
+   renders as an empty box here. This swaps in plain Unicode/emoji
+   glyphs, sized and centered to sit in whatever box the icon already
+   has (circle, list marker, social button) so they read fine even
+   though they won't match the real Font Awesome glyph exactly - that's
+   fine, the goal here is just "not an empty square," not a pixel match.
+   On the live site the real icons already work fine, and this rule
+   would permanently replace them with these plainer glyphs there. */
+i[class*="fa-"]{
+  font-style: normal !important;
+}
+i[class*="fa-"]::before{
+  font-family: "Segoe UI Symbol", "Segoe UI Emoji", Arial, sans-serif !important;
+}
+
+/* Used elsewhere on the site (arrows, checks) */
+.fa-arrow-right::before,
+.fa-arrow-circle-right::before{ content: "\2192" !important; }
+.fa-check::before,
+.fa-check-circle::before,
+.fa-user-check::before{ content: "\2713" !important; }
+
+/* Vote page icon-boxes / icon-list */
+.fa-globe::before{ content: "\1F310" !important; }          /* website link -> globe */
+.fa-house-user::before{ content: "\1F3E0" !important; }      /* home / in-person */
+.fa-map-marker-alt::before{ content: "\1F4CD" !important; }  /* location pin */
+.fa-canadian-maple-leaf::before{ content: "\1F341" !important; } /* Canadian symbol */
+.fa-calendar-check::before{ content: "\1F4C5" !important; } /* date */
+.fa-clock::before{ content: "\1F550" !important; }          /* time */
+
+/* Volunteer page */
+.fa-hands-helping::before{ content: "\1F91D" !important; }  /* handshake */
+
+/* Contact page social icon row (the header/footer social icons elsewhere
+   on the site are inline SVGs already and don't need this). Single
+   letters read fine in a small round social button. */
+.fa-facebook::before{ content: "f" !important; font-family: Georgia, serif !important; font-weight: 700 !important; }
+.fa-instagram::before{ content: "IG" !important; font-family: Arial, sans-serif !important; font-size: 0.55em !important; font-weight: 700 !important; white-space: nowrap !important; }
+.fa-twitter::before{ content: "X" !important; font-family: Arial, sans-serif !important; font-weight: 700 !important; }
+.fa-tiktok::before{ content: "TT" !important; font-family: Arial, sans-serif !important; font-size: 0.5em !important; font-weight: 700 !important; white-space: nowrap !important; }
+
+/* Nav active-page color and link hover/focus use the site's brand
+   accent gold (--color-accent, ~4.97:1 against white - clears the 4.5:1
+   WCAG floor for text). Same treatment on the "EMAIL" / "PHONE NUMBER" /
+   "LOCATION" icon-box captions on /contact/. */
+.current-menu-item > .menu-link,
+.current-menu-ancestor > .menu-link,
+a:hover,
+a:focus{
+  color: var(--color-accent) !important;
+}
+/* Scoped to just the Contact page's EMAIL / PHONE NUMBER / LOCATION
+   captions - NOT a global .elementor-icon-box-title rule, because that
+   would also repaint the "Stay Connected with Yuliya's Team" heading
+   (which is deliberately white against its own dark-gray card
+   background) the same gold, making it unreadable there too. */
+.elementor-element-ce3153c .elementor-icon-box-title,
+.elementor-element-9b19864 .elementor-icon-box-title,
+.elementor-element-1184dd7 .elementor-icon-box-title{
+  color: var(--color-accent) !important;
+}
+
+/* Field grouping: lightweight section labels inserted inside the Contact
+   and Volunteer forms to cluster fields by meaning (e.g. "Your information"
+   / "Your message"). */
+.ff-group-heading{
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--color-text-muted);
+  margin-block: var(--space-4) var(--space-2);
+  padding-block-start: var(--space-3);
+  border-top: 1px solid var(--color-border);
+}
+.ff-group-heading:first-of-type{
+  margin-block-start: 0;
+  padding-block-start: 0;
+  border-top: none;
+}
+
+/* Validation states used by assets/form-validation.js */
+.fluentform .ff-el-is-error input.ff-el-form-control,
+.fluentform .ff-el-is-error textarea.ff-el-form-control,
+.fluentform .ff-el-is-error select.ff-el-form-control{
+  border-color: var(--color-error);
+  background-color: var(--color-error-bg);
+}
+.fluentform .ff-el-form-error,
+.fluentform .ff-custom-error{
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  color: var(--color-error);
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-block-start: var(--space-1);
+}
+.fluentform .ff-custom-error::before{
+  content: "\26A0";
+  line-height: 1;
+}
+.fluentform .ff-form-success-note{
+  color: var(--color-success);
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-block-start: var(--space-2);
+}
+
+/* ==========================================================================
+   ABOUT ME PAGE (about.html)
+   ========================================================================== */
+
+/* 1. CONTAINER: the "Quick facts / Coming together / Vision & Values"
+   section (034f786) pads itself 15% off the full viewport width on its
+   own, instead of using the page's normal 1140px boxed container - so it
+   sits ~76px narrower and off-center from the "About Me" section above
+   it (which does use the standard container). Removing that section's
+   own padding lets its inner .elementor-container fall back to the same
+   1140px max-width/auto-margin every other section on the site uses. */
+.elementor-element-034f786{
+  padding-inline: 0 !important;
+}
+
+/* 2. TOP "ABOUT ME" SECTION: text vs. portrait proportions and alignment.
+   Was a flat 50/50 split with the row stretching both columns to equal
+   height (top-aligning the image at the height of seven paragraphs of
+   text). Widen the text column somewhat - seven paragraphs need the
+   room, and it shortens the line count - and let the row center the
+   (now shorter) image against the text block instead of stretching it. */
+.elementor-element-617de9a{
+  width: 58%;
+}
+.elementor-element-2994996{
+  width: 42%;
+}
+.elementor-element-18cf603 > .elementor-container{
+  align-items: center;
+}
+/* Gap to the next section ("Quick facts about me"): reduce it, and land
+   on the same value used for the "Coming together -> Vision/Values"
+   transition further down (see #7 below) so both major section breaks
+   on this page read as the same size gap, not two different ones. The
+   "Quick facts" heading also carries its own native 20px top margin, so
+   this is set 20px short of --space-6 to land on the same total. */
+.elementor-element-18cf603{
+  padding-block-end: 44px !important;
+}
+
+/* 3-4. BODY TEXT READABILITY + PARAGRAPH RHYTHM: bump the "About Me"
+   copy up from the theme's 16px default to a more comfortable reading
+   size or desktop, with more line-height and a touch more breathing
+   room between paragraphs (was 16px, now a consistent 20px). */
+.elementor-element-3e487e2 p{
+  font-size: 1.0625rem; /* ~17px */
+  line-height: 1.75;
+  margin-block-end: var(--space-3) !important;
+}
+
+/* 5. QUICK FACTS: list items were only ~7px apart (barely distinguishable
+   as separate facts) and ran the full 1140px container width, forcing a
+   full-width line for a single short fact. Add breathing room between
+   items and cap the line width to a comfortable measure. */
+.elementor-element-85bf9ce .elementor-icon-list-item{
+  margin-block-end: var(--space-2) !important;
+}
+.elementor-element-85bf9ce .elementor-icon-list-item:last-child{
+  margin-block-end: 0 !important;
+}
+.elementor-element-85bf9ce .elementor-icon-list-text{
+  line-height: 1.6;
+}
+
+/* 7. CENTRAL INTRODUCTION: "Coming together on every project..." and its
+   supporting paragraph sit right on top of each other (1px gap - fine,
+   keeps them reading as one heading+lead-in), but that same ~1px also
+   separated the paragraph from "My Vision / My Values" below, so the
+   whole section read as one undifferentiated block with no sense of
+   "intro paragraph ends, new subsection begins." Give just that second
+   transition real space. */
+.elementor-element-52bd6ca{
+  margin-block-end: var(--space-6) !important;
+}
+
+/* 8-9. "MY VISION" / "MY VALUES": equal-weight two-column section, but
+   the columns had zero gap between them (touching directly) and their
+   h3 headings were smaller (21px) than every other heading on the page
+   (35-36px) despite being an equally important section - reading as an
+   afterthought rather than a real second half of the page. Give the
+   headings real presence and put breathing room between the columns. */
+.elementor-element-d762106 > .elementor-container{
+  column-gap: var(--space-6);
+}
+.elementor-element-d35be41 .elementor-heading-title,
+.elementor-element-6260bc9 .elementor-heading-title{
+  font-size: 1.75rem !important;
+  line-height: 1.3 !important;
+}
+.elementor-element-8fa3d11 p,
+.elementor-element-3a99000 p,
+.elementor-element-3a99000 li{
+  font-size: 1.0625rem;
+  line-height: 1.7;
+}
+
+/* 12. MOBILE: stack the About Me text/image (already the natural column
+   order) and give the widened 58/42 desktop split back to full width,
+   restore the small gap the "Coming together" paragraph needs before
+   Vision & Values at this size, and give Vision/Values a bit of gap
+   between the two stacked blocks now that they're not side-by-side. */
+@media (max-width: 767px){
+  .elementor-element-617de9a,
+  .elementor-element-2994996{
+    width: 100% !important;
+  }
+  .elementor-element-52bd6ca{
+    margin-block-end: var(--space-6) !important;
+  }
+  .elementor-element-d762106 > .elementor-container{
+    row-gap: var(--space-5);
+  }
+}
+
+/* ==========================================================================
+   HOW TO VOTE PAGE (vote.html)
+   Two spots where "heading + small divider" sit in one section and the
+   content that belongs with them starts in the *next* section - the
+   two sections' own padding plus the default heading-to-divider spacing
+   stacked into an 83px gap that read as two unrelated blocks rather
+   than one heading with its supporting content. Tightened to match the
+   "heading close to its divider" treatment used elsewhere on the site.
+   (Scoped to just these two step headings, not the whole page - the
+   later numbered steps don't have this problem.) */
+.elementor-element-27b9304,
+.elementor-element-f2f0327{
+  margin-block-end: 4px !important;
+}
+.elementor-element-d880b1e,
+.elementor-element-8df18a8{
+  margin-block-end: 4px !important;
+}
+.elementor-element-d880b1e .elementor-divider,
+.elementor-element-8df18a8 .elementor-divider{
+  padding-block: 2px !important;
+}
+/* Same "container gap stacks on top of widget margin" issue as
+   elsewhere on the site - these two sections' own flex gap (20px
+   default) was adding to the margins above regardless. */
+.elementor-element-eb5a0ae > .e-con-inner,
+.elementor-element-cad4e14 > .e-con-inner{
+  gap: 4px !important;
+}
+/* The "Richmond Hill voters will elect:" list also had its own custom
+   30px top padding (on top of the next section's 20px default gap),
+   separate from the heading/divider fix above - that's the rest of
+   this particular gap. */
+.elementor-element-bf43170 > .e-con-inner{
+  padding-block-start: 4px !important;
+}
+.elementor-element-12dc1be > .elementor-widget-container{
+  padding-block-start: 4px !important;
+}

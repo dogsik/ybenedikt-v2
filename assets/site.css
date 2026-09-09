@@ -80,6 +80,7 @@ a{ color:inherit; }
 .section-heading{ text-align:center; max-width:640px; margin:0 auto var(--space-6); }
 .section-heading h2{ font-size:clamp(24px,3.4vw,34px); }
 .section-heading .rule{ width:48px; height:3px; background:var(--color-yellow); margin:var(--space-2) auto 0; border-radius:2px; }
+.section-heading.tight-bottom{ margin-bottom:0; }
 
 section{ padding-block:var(--space-7); }
 
@@ -116,8 +117,12 @@ section{ padding-block:var(--space-7); }
 .row-media img.natural{ aspect-ratio:auto; object-fit:contain; max-height:560px; margin-inline:auto; }
 .row-media h3, .row-media h2{ font-size:22px; }
 .row-media .ph{ border-radius:var(--radius-card); aspect-ratio:3/2; width:100%; background:var(--color-bg-light-2); }
+.row-media.tight-top{ padding-block:0 var(--space-5); }
 @media (max-width:760px){
-  .row-media{ grid-template-columns:1fr; direction:ltr !important; }
+  .row-media{ grid-template-columns:1fr; direction:ltr !important; padding-block:var(--space-3); }
+  .section-heading{ margin-bottom:var(--space-4); }
+  .row-media.tight-top{ padding-block:var(--space-4) var(--space-3); }
+  .section-heading.tight-bottom{ margin-bottom:var(--space-4); }
 }
 
 /* CTA banners */
@@ -130,6 +135,7 @@ section{ padding-block:var(--space-7); }
 .cta-banner.bar{ display:flex; align-items:center; justify-content:center; gap:var(--space-3); flex-wrap:wrap; padding-block:var(--space-4); }
 .cta-banner.bar h3{ margin:0; }
 .cta-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-4); }
+.cta-grid--2{ grid-template-columns:1fr 1fr; }
 @media (max-width:900px){ .cta-grid{ grid-template-columns:1fr; } }
 
 /* Forms */
@@ -141,6 +147,18 @@ section{ padding-block:var(--space-7); }
 .form-group input, .form-group select, .form-group textarea{
   font-family:var(--font-body); font-size:15px; padding:12px 14px;
   border:1px solid var(--color-border); border-radius:8px; background:#fff; color:var(--color-text);
+  box-shadow:none; outline:none;
+}
+/* Firefox (and some other browsers) paint required fields with a native
+   green/red glow via :valid/:invalid - overriding that here so the only
+   colors on the site are the yellow/gray/white/navy palette. */
+.form-group input:valid, .form-group input:invalid,
+.form-group select:valid, .form-group select:invalid,
+.form-group textarea:valid, .form-group textarea:invalid{
+  box-shadow:none;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus{
+  outline:2px solid var(--color-accent); outline-offset:1px;
 }
 .cta-banner--dark .form-group input,
 .cta-banner--dark .form-group select,

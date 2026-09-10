@@ -44,18 +44,38 @@ a{ color:inherit; }
 .site-header nav a{ text-decoration:none; font-size:14px; color:var(--color-text-secondary); }
 .site-header nav a:hover, .site-header nav a.active{ color:var(--color-accent); }
 .site-header nav .btn{ margin-left:8px; }
-.nav-toggle{ display:none; background:none; border:0; font-size:24px; cursor:pointer; color:var(--color-text); }
+.nav-toggle{
+  display:none; background:none; border:0; font-size:20px; cursor:pointer; color:var(--color-text);
+  width:44px; height:44px; align-items:center; justify-content:center; border-radius:8px;
+}
+.nav-toggle .fa-times{ display:none; }
+.nav-backdrop{ display:none; }
 
 @media (max-width:860px){
+  .nav-toggle{ display:flex; position:relative; z-index:46; }
+  .nav-toggle[aria-expanded="true"] .fa-bars{ display:none; }
+  .nav-toggle[aria-expanded="true"] .fa-times{ display:inline; }
+
   .site-header nav{
-    display:none; position:absolute; top:100%; left:0; right:0; background:#fff;
-    flex-direction:column; align-items:flex-start; gap:0; padding:var(--space-2) 24px;
-    border-bottom:1px solid var(--color-border); box-shadow:var(--shadow-card); z-index:20;
+    display:flex; position:fixed; top:0; right:0; height:100vh; width:min(78vw,320px);
+    background:#fff; flex-direction:column; align-items:stretch; gap:0;
+    padding:88px 28px 28px; box-shadow:-8px 0 32px rgba(15,23,42,.18);
+    transform:translateX(100%); visibility:hidden; opacity:0;
+    transition:transform .3s ease, opacity .25s ease, visibility 0s linear .3s;
+    z-index:45; overflow-y:auto;
   }
-  .site-header nav.open{ display:flex; }
-  .site-header nav a{ padding-block:12px; width:100%; }
-  .site-header nav .btn{ margin:12px 0; }
-  .nav-toggle{ display:block; }
+  .site-header nav.open{
+    transform:translateX(0); visibility:visible; opacity:1;
+    transition:transform .3s ease, opacity .25s ease;
+  }
+  .site-header nav a{ padding-block:14px; width:100%; border-bottom:1px solid var(--color-border); font-size:16px; }
+  .site-header nav .btn{ margin:16px 0 0; justify-content:center; border-bottom:none; }
+
+  .nav-backdrop{
+    display:block; position:fixed; inset:0; background:rgba(15,23,42,.5);
+    opacity:0; pointer-events:none; transition:opacity .25s ease; z-index:44;
+  }
+  .nav-backdrop.open{ opacity:1; pointer-events:auto; }
 }
 
 /* Hero */
